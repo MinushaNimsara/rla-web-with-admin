@@ -47,8 +47,8 @@ export default function ImageCarousel({ slides = [], intervalMs = HERO_INTERVAL 
 
   if (!slides.length) {
     return (
-      <div className="hero-viewport" style={styles.placeholder}>
-        
+      <div className="hero-viewport hero-viewport--placeholder">
+        <div className="hero-placeholder-bg" aria-hidden="true" />
       </div>
     );
   }
@@ -87,6 +87,18 @@ export default function ImageCarousel({ slides = [], intervalMs = HERO_INTERVAL 
           >
             ›
           </button>
+          <div className="hero-dots" role="tablist" aria-label="Slide index">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                className={`hero-dot ${i === current ? 'active' : ''}`}
+                aria-label={`Slide ${i + 1}`}
+                aria-selected={i === current}
+                onClick={() => setCurrent(i)}
+              />
+            ))}
+          </div>
         </>
       )}
     </div>
@@ -94,17 +106,6 @@ export default function ImageCarousel({ slides = [], intervalMs = HERO_INTERVAL 
 }
 
 const styles = {
-  wrap: {
-    position: 'relative',
-  },
-  slide: {
-    transition: 'none',
-  },
-  placeholder: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: 'var(--text-muted)',
-    fontSize: 'var(--text-lg)',
-  },
+  wrap: { position: 'relative' },
+  slide: { transition: 'none' },
 };
