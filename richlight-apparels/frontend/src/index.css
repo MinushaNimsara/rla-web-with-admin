@@ -43,8 +43,15 @@
   box-sizing: border-box;
 }
 
+img, video {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -59,9 +66,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
 }
 
-/* Custom cursor (GSAP) – soft blob style, only on public pages */
+/* Custom cursor (GSAP) – soft blob style, only on public pages; disabled on touch devices */
+@media (pointer: coarse) {
+  .cursor-blob { display: none !important; }
+}
 body.cursor-dot-active {
   cursor: none;
 }
@@ -1027,7 +1039,29 @@ button:focus-visible {
   .hero-stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.2); }
   .hero-stat:last-child { border-bottom: none; }
   .nav-menu { display: none !important; }
-  .nav-toggle { display: flex !important; }
+  .nav-toggle {
+    display: flex !important;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (pointer: coarse) {
+  .nav-mobile a {
+    min-height: 44px;
+    padding: 1rem var(--content-gutter);
+    display: flex;
+    align-items: center;
+  }
+  .about-nav-link {
+    min-height: 44px;
+    padding: 0.75rem 1.25rem;
+    display: inline-flex;
+    align-items: center;
+  }
 }
 
 /* Screen-reader only text (e.g. logo link when using image) */
@@ -1047,6 +1081,15 @@ button:focus-visible {
   background: rgba(255, 255, 255, 0.95) !important;
   border-bottom: 1px solid var(--border);
 }
+.navbar .section-inner {
+  padding-left: max(var(--section-padding-x), env(safe-area-inset-left, 0));
+  padding-right: max(var(--section-padding-x), env(safe-area-inset-right, 0));
+}
+.nav-mobile {
+  padding-left: max(var(--content-gutter), env(safe-area-inset-left, 0));
+  padding-right: max(var(--content-gutter), env(safe-area-inset-right, 0));
+  padding-top: max(1rem, env(safe-area-inset-top, 0));
+}
 .navbar a { color: var(--text) !important; }
 .navbar a:hover { color: var(--accent) !important; }
 .navbar .logo-sub { color: var(--accent) !important; }
@@ -1055,6 +1098,7 @@ button:focus-visible {
 .site-footer {
   margin-top: auto;
   padding: var(--section-padding-y) var(--section-padding-x);
+  padding-bottom: max(var(--section-padding-y), env(safe-area-inset-bottom, 0));
   background: linear-gradient(180deg, #1a365d 0%, #0f172a 100%);
   color: rgba(255,255,255,0.9);
   font-size: var(--text-sm);

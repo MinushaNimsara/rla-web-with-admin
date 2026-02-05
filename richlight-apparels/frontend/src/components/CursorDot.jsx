@@ -15,6 +15,8 @@ export default function CursorDot() {
     const blob = blobRef.current;
     if (!blob) return;
 
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
     document.body.classList.add('cursor-dot-active');
 
     const handleMove = (e) => {
