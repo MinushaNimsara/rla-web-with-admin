@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { SiteSettingsProvider } from './context/SiteSettingsContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import CursorDot from './components/CursorDot';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
@@ -24,7 +23,6 @@ function Layout({ children, showNavFooter }) {
   if (!showNavFooter) return children;
   return (
     <>
-      <CursorDot />
       <Navbar />
       {children}
       <Footer />

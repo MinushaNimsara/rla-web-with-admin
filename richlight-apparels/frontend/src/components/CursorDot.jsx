@@ -1,21 +1,32 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { gsap } from '../utils/gsapConfig';
 
+const DESKTOP_BREAKPOINT = 1024;
+
 /**
- * Soft blob cursor: single smooth circle with blur, lags behind pointer.
+ * Soft blob cursor: only on desktop (min-width 1024px). Disabled on mobile and tablet.
  * Rendered via portal to document.body so it is never clipped by parent overflow/transform.
  */
 export default function CursorDot() {
   const blobRef = useRef(null);
   const xRef = useRef(0);
   const yRef = useRef(0);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
+    const mq = window.matchMedia(`(min-width: ${DESKTOP_BREAKPOINT}px)`);
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
+    if (!isDesktop) return;
+
     const blob = blobRef.current;
     if (!blob) return;
-
-    if (window.matchMedia('(pointer: coarse)').matches) return;
 
     document.body.classList.add('cursor-dot-active');
 
@@ -81,7 +92,9 @@ export default function CursorDot() {
       document.body.removeEventListener('mouseout', handleOut);
       cancelAnimationFrame(rafId);
     };
-  }, []);
+  }, [isDesktop]);
+
+  if (!isDesktop) return null;
 
   const cursorEl = <div ref={blobRef} className="cursor-blob" aria-hidden />;
   return createPortal(cursorEl, document.body);
