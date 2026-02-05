@@ -11,7 +11,7 @@ function ProductCard({ title, description, imageUrl, className = '' }) {
       y: -6,
       duration: 0.35,
       ease: 'power2.out',
-      boxShadow: '0 16px 48px rgba(0, 0, 0, 0.4)',
+      boxShadow: '0 12px 40px rgba(13, 148, 136, 0.18)',
     });
     gsap.to(imgRef.current, {
       scale: 1.06,
@@ -26,7 +26,7 @@ function ProductCard({ title, description, imageUrl, className = '' }) {
       y: 0,
       duration: 0.35,
       ease: 'power2.out',
-      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
     });
     gsap.to(imgRef.current, {
       scale: 1,
@@ -61,14 +61,14 @@ const styles = {
     backgroundColor: 'var(--bg-card)',
     borderRadius: '12px',
     overflow: 'hidden',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
     border: '1px solid var(--border)',
-    transition: 'box-shadow 0.3s',
+    transition: 'box-shadow 0.3s, border-color 0.3s',
   },
   imgWrap: {
     width: '100%',
     aspectRatio: '4/3',
-    backgroundColor: 'var(--bg-elevated)',
+    backgroundColor: 'var(--bg-cream)',
     overflow: 'hidden',
   },
   img: {

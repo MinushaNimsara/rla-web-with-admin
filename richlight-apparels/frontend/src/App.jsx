@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { SiteSettingsProvider } from './context/SiteSettingsContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import CursorDot from './components/CursorDot';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
@@ -16,11 +18,13 @@ import ManageCSR from './admin/ManageCSR';
 import ManageNewsline from './admin/ManageNewsline';
 import ManageFactory from './admin/ManageFactory';
 import EditHome from './admin/EditHome';
+import EditAbout from './admin/EditAbout';
 
 function Layout({ children, showNavFooter }) {
   if (!showNavFooter) return children;
   return (
     <>
+      <CursorDot />
       <Navbar />
       {children}
       <Footer />
@@ -96,6 +100,14 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin/dashboard/about"
+          element={
+            <ProtectedRoute>
+              <EditAbout />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Layout>
   );
@@ -104,9 +116,11 @@ function AppRoutes() {
 function App() {
   return (
     <Router>
-      <div className="App">
-        <AppRoutes />
-      </div>
+      <SiteSettingsProvider>
+        <div className="App">
+          <AppRoutes />
+        </div>
+      </SiteSettingsProvider>
     </Router>
   );
 }

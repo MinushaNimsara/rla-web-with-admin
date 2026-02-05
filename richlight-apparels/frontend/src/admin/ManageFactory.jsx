@@ -7,9 +7,9 @@ const formStyles = {
   container: { padding: '2rem', maxWidth: '900px', margin: '0 auto' },
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' },
   backLink: { color: '#1d72a3', textDecoration: 'none', fontWeight: 500 },
-  form: { backgroundColor: '#2a2a2a', padding: '2rem', borderRadius: '8px', marginBottom: '2rem' },
-  input: { width: '100%', padding: '0.75rem', fontSize: '1rem', border: '1px solid #444', borderRadius: '4px', marginBottom: '1rem', boxSizing: 'border-box', backgroundColor: '#1a1a1a', color: '#eee' },
-  previewBox: { marginBottom: '1rem', padding: '1rem', border: '1px dashed #555', borderRadius: '8px', textAlign: 'center', minHeight: '100px' },
+  form: { backgroundColor: '#2a2a2a', color: '#f2f2f2', padding: '2rem', borderRadius: '8px', marginBottom: '2rem' },
+  input: { width: '100%', padding: '0.75rem', fontSize: '1rem', border: '1px solid #555', borderRadius: '4px', marginBottom: '1rem', boxSizing: 'border-box', backgroundColor: '#1a1a1a', color: '#f0f0f0' },
+  previewBox: { marginBottom: '1rem', padding: '1rem', border: '1px dashed #666', borderRadius: '8px', textAlign: 'center', minHeight: '100px' },
   previewImg: { maxWidth: '200px', maxHeight: '200px', borderRadius: '4px' },
   button: { padding: '0.75rem 1.5rem', fontSize: '1rem', backgroundColor: '#1d72a3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', marginBottom: '0.5rem' },
   buttonDanger: { backgroundColor: '#c0392b' },
@@ -17,9 +17,9 @@ const formStyles = {
   success: { backgroundColor: '#27ae60', color: 'white' },
   error: { backgroundColor: '#c0392b', color: 'white' },
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '1rem' },
-  card: { backgroundColor: '#2a2a2a', borderRadius: '8px', overflow: 'hidden' },
+  card: { backgroundColor: '#333', color: '#f0f0f0', borderRadius: '8px', overflow: 'hidden' },
   cardImg: { width: '100%', height: '140px', objectFit: 'cover' },
-  cardBody: { padding: '0.75rem' },
+  cardBody: { padding: '0.75rem', color: '#f0f0f0' },
 };
 
 export default function ManageFactory() {

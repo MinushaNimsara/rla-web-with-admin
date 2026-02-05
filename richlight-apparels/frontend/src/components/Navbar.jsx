@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useSiteSettings } from '../context/SiteSettingsContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,6 +17,7 @@ const links = [
 ];
 
 export default function Navbar() {
+  const { logoUrl } = useSiteSettings();
   const [mobileOpen, setMobileOpen] = useState(false);
   const navRef = useRef(null);
   const location = useLocation();
@@ -29,14 +31,14 @@ export default function Navbar() {
     const nav = navRef.current;
     ScrollTrigger.create({
       trigger: document.body,
-      start: '50px top',
+      start: '60px top',
       end: 'max',
       onUpdate: (self) => {
         const y = self.scroll();
-        const isScrolled = y > 30;
+        const isScrolled = y > 40;
         gsap.to(nav, {
-          backgroundColor: isScrolled ? 'rgba(12, 12, 12, 0.92)' : 'rgba(12, 12, 12, 0.6)',
-          backdropFilter: isScrolled ? 'blur(12px)' : 'blur(8px)',
+          backgroundColor: isScrolled ? 'rgba(255, 255, 255, 0.98)' : 'rgba(255, 255, 255, 0.9)',
+          boxShadow: isScrolled ? '0 2px 20px rgba(0,0,0,0.06)' : 'none',
           duration: 0.3,
           ease: 'power2.out',
         });
@@ -48,9 +50,12 @@ export default function Navbar() {
   return (
     <nav ref={navRef} className="navbar" style={styles.nav}>
       <div className="section-inner" style={styles.container}>
-        <Link to="/" style={styles.logo}>
-          <span style={styles.logoText}>Rich Light</span>
-          <span style={styles.logoSub}>Apparels</span>
+        <Link to="/" style={{ ...styles.logo, ...(logoUrl ? styles.logoWithImage : {}) }}>
+          {logoUrl && <img src={logoUrl} alt="" style={styles.logoImg} />}
+          <span style={styles.logoTextWrap}>
+            <span style={styles.logoText}>Rich Light</span>
+            <span style={styles.logoSub}>Apparels</span>
+          </span>
         </Link>
 
         <ul style={styles.menu} className="nav-menu">
@@ -94,7 +99,13 @@ export default function Navbar() {
         <ul style={styles.mobileMenu}>
           {links.map(({ to, label }) => (
             <li key={to}>
-              <Link to={to} style={styles.mobileLink}>
+              <Link
+                to={to}
+                style={{
+                  ...styles.mobileLink,
+                  ...(location.pathname === to ? styles.mobileLinkActive : {}),
+                }}
+              >
                 {label}
               </Link>
             </li>
@@ -111,7 +122,7 @@ const styles = {
     top: 0,
     zIndex: 1000,
     borderBottom: '1px solid var(--border)',
-    transition: 'background-color 0.3s, backdrop-filter 0.3s',
+    transition: 'background-color 0.3s, box-shadow 0.3s',
   },
   container: {
     display: 'flex',
@@ -123,9 +134,28 @@ const styles = {
   logo: {
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'flex-start',
     lineHeight: 1.15,
     textDecoration: 'none',
     color: 'var(--text)',
+  },
+  logoWithImage: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: '0.5rem',
+  },
+  logoImg: {
+    display: 'block',
+    height: 36,
+    width: 'auto',
+    maxWidth: 120,
+    objectFit: 'contain',
+    flexShrink: 0,
+  },
+  logoTextWrap: {
+    display: 'flex',
+    flexDirection: 'column',
+    lineHeight: 1.15,
   },
   logoText: {
     fontSize: 'var(--heading-3)',
@@ -146,7 +176,7 @@ const styles = {
     padding: 0,
   },
   link: {
-    color: 'var(--text-muted)',
+    color: 'var(--text)',
     textDecoration: 'none',
     fontSize: 'var(--text-base)',
     fontWeight: 500,
@@ -154,7 +184,10 @@ const styles = {
     transition: 'color 0.2s',
   },
   linkActive: {
-    color: 'var(--accent)',
+    color: 'var(--accent-sun)',
+    fontWeight: 600,
+    borderBottom: '2px solid var(--accent-sun)',
+    paddingBottom: '0.2rem',
   },
   toggle: {
     display: 'none',
@@ -171,7 +204,7 @@ const styles = {
     display: 'block',
     width: 22,
     height: 2,
-    backgroundColor: 'var(--text)',
+    backgroundColor: 'var(--accent)',
     borderRadius: 1,
     transition: 'transform 0.3s, opacity 0.3s',
   },
@@ -184,7 +217,7 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'var(--bg)',
+    backgroundColor: 'var(--bg-white)',
     paddingTop: 5,
     paddingBottom: 2,
     zIndex: 999,
@@ -213,5 +246,10 @@ const styles = {
     color: 'var(--text)',
     textDecoration: 'none',
     borderBottom: '1px solid var(--border)',
+  },
+  mobileLinkActive: {
+    color: 'var(--accent-sun)',
+    fontWeight: 600,
+    borderBottom: '2px solid var(--accent-sun)',
   },
 };

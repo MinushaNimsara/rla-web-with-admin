@@ -46,36 +46,50 @@ function AdminDashboard() {
       <div style={styles.grid}>
         <Link to="/admin/dashboard/home" style={styles.cardLink}>
           <div style={styles.card}>
-            <h3>Edit Home Page</h3>
-            <p>Hero carousel, brands tape, factory video</p>
+            <h3 style={styles.cardHeading}>Edit Home Page</h3>
+            <p style={styles.cardDesc}>Hero carousel, brands tape, factory video</p>
+          </div>
+        </Link>
+
+        <Link to="/admin/dashboard/home#footer-contact" style={styles.cardLink}>
+          <div style={styles.card}>
+            <h3 style={styles.cardHeading}>Edit Contact Page</h3>
+            <p style={styles.cardDesc}>Heading, description, address, phone, email, website, background image</p>
+          </div>
+        </Link>
+
+        <Link to="/admin/dashboard/about" style={styles.cardLink}>
+          <div style={styles.card}>
+            <h3 style={styles.cardHeading}>Edit About Us</h3>
+            <p style={styles.cardDesc}>Intro, vision, mission, values, history, directors, management</p>
           </div>
         </Link>
 
         <Link to="/admin/dashboard/products" style={styles.cardLink}>
           <div style={styles.card}>
-            <h3>Manage Products</h3>
-            <p>Add, edit, delete product cards</p>
+            <h3 style={styles.cardHeading}>Manage Products</h3>
+            <p style={styles.cardDesc}>Add, edit, delete product cards</p>
           </div>
         </Link>
 
         <Link to="/admin/dashboard/csr" style={styles.cardLink}>
           <div style={styles.card}>
-            <h3>Manage CSR</h3>
-            <p>Add, edit, delete CSR cards</p>
+            <h3 style={styles.cardHeading}>Manage CSR</h3>
+            <p style={styles.cardDesc}>Add, edit, delete CSR cards</p>
           </div>
         </Link>
 
         <Link to="/admin/dashboard/newsline" style={styles.cardLink}>
           <div style={styles.card}>
-            <h3>Manage Newsline</h3>
-            <p>Add, edit, delete news cards</p>
+            <h3 style={styles.cardHeading}>Manage Newsline</h3>
+            <p style={styles.cardDesc}>Add, edit, delete news cards</p>
           </div>
         </Link>
 
         <Link to="/admin/dashboard/factory" style={styles.cardLink}>
           <div style={styles.card}>
-            <h3>Manage Factory</h3>
-            <p>Add, remove factory images</p>
+            <h3 style={styles.cardHeading}>Manage Factory</h3>
+            <p style={styles.cardDesc}>Add, remove factory images</p>
           </div>
         </Link>
       </div>
@@ -122,11 +136,14 @@ const styles = {
   },
   card: {
     backgroundColor: '#2a2a2a',
+    color: '#f2f2f2',
     padding: '1.5rem',
     borderRadius: '8px',
     boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
     cursor: 'pointer',
   },
+  cardHeading: { color: '#fff', marginTop: 0, marginBottom: '0.35rem', fontSize: '1.15rem' },
+  cardDesc: { color: '#d8d8d8', margin: 0, fontSize: '0.9rem' },
 };
 
 export default AdminDashboard;

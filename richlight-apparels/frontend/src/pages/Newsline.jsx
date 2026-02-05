@@ -59,6 +59,7 @@ export default function Newsline() {
                 title={n.title}
                 description={n.description}
                 imageUrl={n.imageUrl || n.imageURL || n.image || n.imgUrl}
+                date={n.date}
               />
             ))}
           </div>

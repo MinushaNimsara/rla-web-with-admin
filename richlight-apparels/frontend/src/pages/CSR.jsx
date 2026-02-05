@@ -59,6 +59,7 @@ export default function CSR() {
                 title={c.title}
                 description={c.description}
                 imageUrl={c.imageUrl || c.imageURL || c.image || c.imgUrl}
+                date={c.date}
               />
             ))}
           </div>

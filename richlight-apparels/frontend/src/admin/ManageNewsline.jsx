@@ -7,20 +7,22 @@ const formStyles = {
   container: { padding: '2rem', maxWidth: '900px', margin: '0 auto' },
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' },
   backLink: { color: '#1d72a3', textDecoration: 'none', fontWeight: 500 },
-  form: { backgroundColor: '#2a2a2a', padding: '2rem', borderRadius: '8px', marginBottom: '2rem' },
-  input: { width: '100%', padding: '0.75rem', fontSize: '1rem', border: '1px solid #444', borderRadius: '4px', marginBottom: '1rem', boxSizing: 'border-box', backgroundColor: '#1a1a1a', color: '#eee' },
-  textarea: { width: '100%', minHeight: '80px', padding: '0.75rem', fontSize: '1rem', border: '1px solid #444', borderRadius: '4px', marginBottom: '1rem', boxSizing: 'border-box', resize: 'vertical', backgroundColor: '#1a1a1a', color: '#eee' },
-  previewBox: { marginBottom: '1rem', padding: '1rem', border: '1px dashed #555', borderRadius: '8px', textAlign: 'center', minHeight: '100px' },
+  form: { backgroundColor: '#2a2a2a', color: '#f2f2f2', padding: '2rem', borderRadius: '8px', marginBottom: '2rem' },
+  formHeading: { color: '#fff', marginTop: 0, marginBottom: '1rem', fontSize: '1.25rem' },
+  sectionHeading: { color: 'var(--text)', marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem' },
+  input: { width: '100%', padding: '0.75rem', fontSize: '1rem', border: '1px solid #555', borderRadius: '4px', marginBottom: '1rem', boxSizing: 'border-box', backgroundColor: '#1a1a1a', color: '#f0f0f0' },
+  textarea: { width: '100%', minHeight: '80px', padding: '0.75rem', fontSize: '1rem', border: '1px solid #555', borderRadius: '4px', marginBottom: '1rem', boxSizing: 'border-box', resize: 'vertical', backgroundColor: '#1a1a1a', color: '#f0f0f0' },
+  previewBox: { marginBottom: '1rem', padding: '1rem', border: '1px dashed #666', borderRadius: '8px', textAlign: 'center', minHeight: '100px' },
   previewImg: { maxWidth: '180px', maxHeight: '180px', borderRadius: '4px' },
   button: { padding: '0.75rem 1.5rem', fontSize: '1rem', backgroundColor: '#1d72a3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', marginBottom: '0.5rem' },
-  buttonSecondary: { padding: '0.75rem 1.5rem', fontSize: '1rem', backgroundColor: '#444', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' },
+  buttonSecondary: { padding: '0.75rem 1.5rem', fontSize: '1rem', backgroundColor: '#555', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' },
   buttonDanger: { backgroundColor: '#c0392b' },
   message: { padding: '0.75rem', borderRadius: '4px', marginBottom: '1rem' },
   success: { backgroundColor: '#27ae60', color: 'white' },
   error: { backgroundColor: '#c0392b', color: 'white' },
-  card: { display: 'flex', gap: '1rem', alignItems: 'center', padding: '1rem', backgroundColor: '#2a2a2a', borderRadius: '8px', marginBottom: '1rem', flexWrap: 'wrap' },
+  card: { display: 'flex', gap: '1rem', alignItems: 'center', padding: '1rem', backgroundColor: '#333', color: '#f0f0f0', borderRadius: '8px', marginBottom: '1rem', flexWrap: 'wrap' },
   cardImg: { width: '70px', height: '70px', objectFit: 'cover', borderRadius: '4px' },
-  cardContent: { flex: 1, minWidth: '180px' },
+  cardContent: { flex: 1, minWidth: '180px', color: '#f0f0f0' },
 };
 
 export default function ManageNewsline() {
@@ -29,7 +31,7 @@ export default function ManageNewsline() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState(null);
-  const [form, setForm] = useState({ title: '', description: '', imageUrl: '' });
+  const [form, setForm] = useState({ title: '', description: '', imageUrl: '', date: '' });
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [editingId, setEditingId] = useState(null);
@@ -77,7 +79,7 @@ export default function ManageNewsline() {
   };
 
   const resetForm = () => {
-    setForm({ title: '', description: '', imageUrl: '' });
+    setForm({ title: '', description: '', imageUrl: '', date: '' });
     setSelectedFile(null);
     setPreviewUrl('');
     setEditingId(null);
@@ -92,10 +94,10 @@ export default function ManageNewsline() {
     setMessage(null);
     try {
       if (editingId) {
-        await updateNewslineItem(editingId, { title: form.title.trim(), description: form.description.trim() || '', imageUrl: form.imageUrl || '' });
+        await updateNewslineItem(editingId, { title: form.title.trim(), description: form.description.trim() || '', imageUrl: form.imageUrl || '', date: form.date.trim() || '' });
         setMessage({ type: 'success', text: 'Updated!' });
       } else {
-        await addNewslineItem({ title: form.title.trim(), description: form.description.trim() || '', imageUrl: form.imageUrl || '' });
+        await addNewslineItem({ title: form.title.trim(), description: form.description.trim() || '', imageUrl: form.imageUrl || '', date: form.date.trim() || '' });
         setMessage({ type: 'success', text: 'Saved!' });
       }
       resetForm();
@@ -126,9 +128,11 @@ export default function ManageNewsline() {
         <Link to="/admin/dashboard" style={formStyles.backLink}>← Back to Dashboard</Link>
       </div>
       <form style={formStyles.form} onSubmit={handleSave}>
-        <h3>{editingId ? 'Edit Item' : 'Add News Item'}</h3>
+        <h3 style={formStyles.formHeading}>{editingId ? 'Edit Item' : 'Add News Item'}</h3>
         {message && <div style={{ ...formStyles.message, ...(message.type === 'success' ? formStyles.success : formStyles.error) }}>{message.text}</div>}
         <input type="text" placeholder="Title" value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} style={formStyles.input} required />
+        <label style={{ display: 'block', color: '#d8d8d8', fontSize: '0.9rem', marginBottom: '0.35rem' }}>Date (optional)</label>
+        <input type="date" value={form.date} onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))} style={formStyles.input} />
         <textarea placeholder="Description" value={form.description} onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} style={formStyles.textarea} />
         <div style={formStyles.previewBox}>
           {previewUrl ? (
@@ -151,12 +155,15 @@ export default function ManageNewsline() {
         <button type="submit" style={formStyles.button} disabled={saving || uploading}>{saving ? 'Saving...' : editingId ? 'Update' : 'Save'}</button>
         {editingId && <button type="button" style={formStyles.buttonSecondary} onClick={resetForm}>Cancel</button>}
       </form>
-      <h3>Existing items</h3>
+      <h3 style={formStyles.sectionHeading}>Existing items</h3>
       {loading ? <p>Loading...</p> : items.length === 0 ? <p>No items yet.</p> : items.map((p) => (
         <div key={p.id} style={formStyles.card}>
           {p.imageUrl && <img src={p.imageUrl} alt="" style={formStyles.cardImg} />}
-          <div style={formStyles.cardContent}><strong>{p.title}</strong></div>
-          <button type="button" style={formStyles.buttonSecondary} onClick={() => { setForm({ title: p.title, description: p.description || '', imageUrl: p.imageUrl || '' }); setEditingId(p.id); setPreviewUrl(p.imageUrl || ''); }}>Edit</button>
+          <div style={formStyles.cardContent}>
+            <strong>{p.title}</strong>
+            {p.date && <span style={{ display: 'block', fontSize: '0.85rem', color: '#b0b0b0', marginTop: '0.25rem' }}>{p.date}</span>}
+          </div>
+          <button type="button" style={formStyles.buttonSecondary} onClick={() => { setForm({ title: p.title, description: p.description || '', imageUrl: p.imageUrl || '', date: p.date || '' }); setEditingId(p.id); setPreviewUrl(p.imageUrl || ''); }}>Edit</button>
           <button type="button" style={{ ...formStyles.button, ...formStyles.buttonDanger }} onClick={() => handleDelete(p.id)}>Delete</button>
         </div>
       ))}

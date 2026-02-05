@@ -24,6 +24,7 @@ export const COLLECTIONS = {
   FACTORY: 'factory',
   GALLERY: 'gallery',
   HOME_SETTINGS: 'homeSettings', // factory video URL, etc.
+  ABOUT_PAGE: 'aboutPage',
 };
 
 // ========== PRODUCTS ==========
@@ -230,5 +231,17 @@ export async function getHomeSettings() {
 
 export async function setHomeSettings(data) {
   const ref = doc(db, COLLECTIONS.HOME_SETTINGS, 'main');
+  await setDoc(ref, { ...data, updatedAt: serverTimestamp() }, { merge: true });
+}
+
+// ========== ABOUT PAGE (intro, vision, mission, values, history, directors, management) ==========
+export async function getAboutPage() {
+  const ref = doc(db, COLLECTIONS.ABOUT_PAGE, 'main');
+  const snap = await getDoc(ref);
+  return snap.exists() ? snap.data() : {};
+}
+
+export async function setAboutPage(data) {
+  const ref = doc(db, COLLECTIONS.ABOUT_PAGE, 'main');
   await setDoc(ref, { ...data, updatedAt: serverTimestamp() }, { merge: true });
 }

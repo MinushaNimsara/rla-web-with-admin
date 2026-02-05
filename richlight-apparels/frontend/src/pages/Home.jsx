@@ -1,11 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import ImageCarousel from '../components/ImageCarousel';
+import HeroOverlay from '../components/HeroOverlay';
+import HeroStats from '../components/HeroStats';
 import BrandsTape from '../components/BrandsTape';
+import WhoWeAreSection from '../components/WhoWeAreSection';
+import ApparelSegmentsSection from '../components/ApparelSegmentsSection';
+import ManufacturingProcessSection from '../components/ManufacturingProcessSection';
 import ProductCard from '../components/ProductCard';
 import CSRCard from '../components/CSRCard';
 import NewsCard from '../components/NewsCard';
-import { revealSection } from '../utils/gsapConfig';
+import { revealSection, revealOnScroll } from '../utils/gsapConfig';
 import {
   getHeroSlides,
   getBrands,
@@ -38,7 +43,7 @@ const linkStyle = {
   color: 'var(--accent)',
   fontWeight: 600,
   fontSize: 'var(--text-base)',
-  transition: 'transform 0.2s',
+  transition: 'transform 0.2s, color 0.2s',
 };
 
 export default function Home() {
@@ -56,6 +61,7 @@ export default function Home() {
   const sectionNews = useRef(null);
   const sectionFactory = useRef(null);
   const sectionGallery = useRef(null);
+  const sectionBrands = useRef(null);
 
   useEffect(() => {
     async function load() {
@@ -86,13 +92,15 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const cleanups = [];
-    if (!loading) {
-      [sectionProducts, sectionCSR, sectionNews, sectionFactory, sectionGallery].forEach((ref) => {
-        const cleanup = revealSection(ref.current, { stagger: 0.1 });
-        if (cleanup) cleanups.push(cleanup);
-      });
-    }
+    if (loading) return () => {};
+    const cleanups = [
+      revealSection(sectionProducts.current, { stagger: 0.1, scale: true }),
+      revealSection(sectionCSR.current, { stagger: 0.1 }),
+      revealSection(sectionNews.current, { stagger: 0.1, scale: true }),
+      revealSection(sectionFactory.current, { stagger: 0.08 }),
+      revealSection(sectionGallery.current, { stagger: 0.05 }),
+      revealOnScroll(sectionBrands.current, { y: 20, duration: 0.9 }),
+    ].filter(Boolean);
     return () => cleanups.forEach((c) => c());
   }, [loading]);
 
@@ -100,18 +108,27 @@ export default function Home() {
 
   return (
     <main>
-      <section aria-label="Hero">
+      <section aria-label="Hero" className="hero-section-wrap">
         <ImageCarousel slides={heroSlides.length ? heroSlides : []} />
+        <HeroOverlay />
       </section>
 
-      <section aria-label="Brands" style={{ padding: 0 }}>
+      <HeroStats stats={homeSettings.heroStats} />
+
+      <section ref={sectionBrands} aria-label="Brands" style={{ padding: 0 }}>
         <BrandsTape brands={brands} />
       </section>
 
+      <WhoWeAreSection about={homeSettings} />
+
+      <ApparelSegmentsSection data={homeSettings} />
+
+      <ManufacturingProcessSection data={homeSettings} />
+
       <section
         ref={sectionProducts}
-        className={sectionClass}
-        style={{ ...sectionPadding, background: 'var(--bg)' }}
+        className={`${sectionClass} section-white`}
+        style={sectionPadding}
       >
         <div style={sectionInner}>
           <h2 className="section-heading" style={{ marginBottom: '0.25em' }}>
@@ -144,8 +161,8 @@ export default function Home() {
 
       <section
         ref={sectionCSR}
-        className={sectionClass}
-        style={{ ...sectionPadding, background: 'var(--bg-elevated)' }}
+        className={`${sectionClass} section-cream`}
+        style={sectionPadding}
       >
         <div style={sectionInner}>
           <h2 className="section-heading" style={{ marginBottom: '0.25em' }}>
@@ -166,6 +183,7 @@ export default function Home() {
                   title={c.title}
                   description={c.description}
                   imageUrl={c.imageUrl || c.imageURL || c.image || c.imgUrl}
+                  date={c.date}
                 />
               ))}
             </div>
@@ -178,8 +196,8 @@ export default function Home() {
 
       <section
         ref={sectionNews}
-        className={sectionClass}
-        style={{ ...sectionPadding, background: 'var(--bg)' }}
+        className={`${sectionClass} section-blue`}
+        style={sectionPadding}
       >
         <div style={sectionInner}>
           <h2 className="section-heading" style={{ marginBottom: '0.25em' }}>
@@ -200,6 +218,7 @@ export default function Home() {
                   title={n.title}
                   description={n.description}
                   imageUrl={n.imageUrl || n.imageURL || n.image || n.imgUrl}
+                  date={n.date}
                 />
               ))}
             </div>
@@ -213,8 +232,8 @@ export default function Home() {
       {factoryVideoUrl && (
         <section
           ref={sectionFactory}
-          className={sectionClass}
-          style={{ ...sectionPadding, background: 'var(--bg-elevated)' }}
+          className={`${sectionClass} section-white`}
+          style={sectionPadding}
         >
           <div style={sectionInner}>
             <h2 className="section-heading" style={{ marginBottom: '1rem' }}>
@@ -255,8 +274,8 @@ export default function Home() {
       {gallery.length > 0 && (
         <section
           ref={sectionGallery}
-          className={sectionClass}
-          style={{ ...sectionPadding, background: 'var(--bg)' }}
+          className={`${sectionClass} section-green`}
+          style={sectionPadding}
         >
           <div style={sectionInner}>
             <h2 className="section-heading" style={{ marginBottom: '1.5rem' }}>
@@ -272,6 +291,7 @@ export default function Home() {
               {gallery.map((g) => (
                 <div
                   key={g.id}
+                  className="gallery-item"
                   style={{
                     aspectRatio: '1',
                     borderRadius: 8,

@@ -48,7 +48,7 @@ export default function ImageCarousel({ slides = [], intervalMs = HERO_INTERVAL 
   if (!slides.length) {
     return (
       <div className="hero-viewport" style={styles.placeholder}>
-        <p>Hero images will appear here. Add slides in Admin → Edit Home.</p>
+        
       </div>
     );
   }
@@ -87,17 +87,6 @@ export default function ImageCarousel({ slides = [], intervalMs = HERO_INTERVAL 
           >
             ›
           </button>
-          <div className="hero-dots">
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                className={`hero-dot ${i === current ? 'active' : ''}`}
-                onClick={() => setCurrent(i)}
-                aria-label={`Slide ${i + 1}`}
-              />
-            ))}
-          </div>
         </>
       )}
     </div>
